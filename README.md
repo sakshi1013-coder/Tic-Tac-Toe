@@ -30,6 +30,23 @@ A modern, aesthetic, and responsive Tic-Tac-Toe web application built with **PHP
 - **JavaScript (Vanilla)**: Manages UI updates, animations, and AJAX requests.
 - **CSS3**: Custom styling, grid layout, and dark mode transitions.
 - **HTML5**: Semantic structure.
+---
 
+## 🚀 How to Run Locally
+
+This project requires a PHP environment to handle sessions and the game API.
+
+### 1. Using PHP's Built-in Server (Recommended)
+1. **Open your Terminal** in the project directory.
+2. Run the following command:
+   ```bash
+   php -S localhost:8000
+   ```
+3. Open your browser and visit `http://localhost:8000`.
+
+### 2. Using a Local Server (XAMPP / MAMP / WAMP)
+1. Move the `tic tac toe` folder into your server's root directory (e.g., `htdocs` for XAMPP).
+2. Start the **Apache** server from your control panel.
+3. Access the game via `http://localhost/tic-tac-toe`.
 ---
 Built with ❤️ by Antigravity.
