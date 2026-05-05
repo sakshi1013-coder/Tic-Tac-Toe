@@ -52,11 +52,11 @@ $gameState = [
                 <div class="player-inputs">
                     <div class="input-group">
                         <span class="symbol x">X</span>
-                        <input type="text" id="player-x-name" value="<?php echo htmlspecialchars($_SESSION['players']['X']); ?>" placeholder="Player 1">
+                        <input type="text" id="player-x-name" value="<?php echo htmlspecialchars($_SESSION['players']['X']); ?>" placeholder="Player 1" onfocus="this.select()">
                     </div>
                     <div class="input-group">
                         <span class="symbol o">O</span>
-                        <input type="text" id="player-o-name" value="<?php echo htmlspecialchars($_SESSION['players']['O']); ?>" placeholder="Player 2">
+                        <input type="text" id="player-o-name" value="<?php echo htmlspecialchars($_SESSION['players']['O']); ?>" placeholder="Player 2" onfocus="this.select()">
                     </div>
                 </div>
 
@@ -87,7 +87,9 @@ $gameState = [
                             <span class="cell-content"><?php echo $_SESSION['board'][$i]; ?></span>
                         </div>
                     <?php endfor; ?>
+                    <div id="winning-line" class="winning-line"></div>
                 </div>
+                <div id="confetti-container"></div>
             </div>
 
             <div class="controls">

@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultTitle = document.getElementById('result-title');
     const resultMessage = document.getElementById('result-message');
     const modalClose = document.getElementById('modal-close');
+    const winningLine = document.getElementById('winning-line');
+    const confettiContainer = document.getElementById('confetti-container');
 
     // State from PHP
     let gameState = window.initialGameState;
@@ -151,6 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
             state.win_combo.forEach(index => {
                 cells[index].classList.add('winner');
             });
+            drawWinningLine(state.win_combo);
+            triggerConfetti();
+        } else {
+            resetWinningLine();
         }
 
         // Update scores
@@ -200,6 +206,86 @@ document.addEventListener('DOMContentLoaded', () => {
             darkModeToggle.checked = false;
             document.body.classList.add('light-mode');
             document.body.classList.remove('dark-mode');
+        }
+    }
+
+    function drawWinningLine(combo) {
+        const board = document.getElementById('game-board');
+        const boardRect = board.getBoundingClientRect();
+        const cellSize = boardRect.width / 3;
+        
+        // Reset line
+        winningLine.className = 'winning-line';
+        winningLine.style.width = '0';
+        winningLine.style.height = '0';
+        winningLine.style.top = '0';
+        winningLine.style.left = '0';
+        winningLine.style.transform = 'none';
+
+        const comboStr = combo.sort().join(',');
+        
+        // Horizontal rows
+        if (comboStr === '0,1,2') {
+            winningLine.classList.add('horizontal', 'draw');
+            winningLine.style.top = (cellSize / 2 - 3) + 'px';
+        } else if (comboStr === '3,4,5') {
+            winningLine.classList.add('horizontal', 'draw');
+            winningLine.style.top = (cellSize + cellSize / 2 - 3) + 'px';
+        } else if (comboStr === '6,7,8') {
+            winningLine.classList.add('horizontal', 'draw');
+            winningLine.style.top = (2 * cellSize + cellSize / 2 - 3) + 'px';
+        }
+        // Vertical columns
+        else if (comboStr === '0,3,6') {
+            winningLine.classList.add('vertical', 'draw-v');
+            winningLine.style.left = (cellSize / 2 - 3) + 'px';
+        } else if (comboStr === '1,4,7') {
+            winningLine.classList.add('vertical', 'draw-v');
+            winningLine.style.left = (cellSize + cellSize / 2 - 3) + 'px';
+        } else if (comboStr === '2,5,8') {
+            winningLine.classList.add('vertical', 'draw-v');
+            winningLine.style.left = (2 * cellSize + cellSize / 2 - 3) + 'px';
+        }
+        // Diagonals
+        else if (comboStr === '0,4,8') {
+            winningLine.classList.add('diagonal-1');
+            winningLine.style.top = '0';
+            winningLine.style.left = '0';
+            winningLine.style.width = '141%'; // sqrt(2) * 100%
+        } else if (comboStr === '2,4,6') {
+            winningLine.classList.add('diagonal-2');
+            winningLine.style.top = '0';
+            winningLine.style.right = '0';
+            winningLine.style.width = '141%';
+        }
+        
+        // Match line color to winner
+        const winner = gameState.board[combo[0]];
+        const color = winner === 'X' ? 'var(--cupids-arrow)' : 'var(--thistle-down)';
+        winningLine.style.backgroundColor = color;
+        winningLine.style.boxShadow = `0 0 15px ${color}`;
+    }
+
+    function resetWinningLine() {
+        winningLine.className = 'winning-line';
+        winningLine.style.width = '0';
+        winningLine.style.height = '0';
+    }
+
+    function triggerConfetti() {
+        const colors = ['#6999A1', '#9295C0', '#AB82A4', '#F06E95', '#FC9390', '#FEE3CA'];
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = (Math.random() * 8 + 5) + 'px';
+            confetti.style.height = (Math.random() * 8 + 5) + 'px';
+            confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+            confettiContainer.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
         }
     }
 });
