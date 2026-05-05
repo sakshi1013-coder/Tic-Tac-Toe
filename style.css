@@ -1,0 +1,406 @@
+:root {
+    /* Color Palette */
+    --puddle-jumper: #6999A1;
+    --thistle-down: #9295C0;
+    --dusty-lavender: #AB82A4;
+    --cupids-arrow: #F06E95;
+    --lolly: #FC9390;
+    --peachade: #FEE3CA;
+    
+    /* Light Mode Defaults */
+    --bg-color: var(--peachade);
+    --container-bg: rgba(255, 255, 255, 0.7);
+    --header-bg: var(--puddle-jumper);
+    --board-bg: var(--dusty-lavender);
+    --cell-bg: var(--peachade);
+    --text-color: #333;
+    --text-light: #fff;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --accent: var(--cupids-arrow);
+    --secondary: var(--thistle-down);
+    --btn-bg: var(--lolly);
+    --btn-hover: var(--cupids-arrow);
+    
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode {
+    --bg-color: #1e1e2f;
+    --container-bg: rgba(30, 30, 47, 0.8);
+    --header-bg: #2a2a40;
+    --board-bg: #3d3d5c;
+    --cell-bg: #2a2a40;
+    --text-color: var(--peachade);
+    --text-light: #fff;
+    --shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --puddle-jumper: #4a6b71; /* Muted versions */
+    --thistle-down: #6b6e91;
+    --dusty-lavender: #7a5d75;
+    --cupids-arrow: #b85472;
+    --lolly: #c2716f;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    background: var(--container-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin: 20px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+header {
+    background-color: var(--header-bg);
+    padding: 24px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+header h1 {
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mode-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.3);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--cupids-arrow);
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+main {
+    padding: 24px;
+}
+
+.game-info {
+    margin-bottom: 24px;
+}
+
+.player-inputs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: var(--cell-bg);
+    border-radius: 12px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.input-group .symbol {
+    font-weight: 800;
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.symbol.x { color: var(--cupids-arrow); }
+.symbol.o { color: var(--thistle-down); }
+
+.input-group input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-family: inherit;
+    font-weight: 600;
+    outline: none;
+}
+
+.status-banner {
+    background: var(--thistle-down);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 16px;
+    transition: var(--transition);
+}
+
+.score-board {
+    display: flex;
+    gap: 12px;
+}
+
+.score-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--cell-bg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.score-card .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+    opacity: 0.8;
+}
+
+.score-card .value {
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.score-card.x { border-bottom: 4px solid var(--cupids-arrow); }
+.score-card.o { border-bottom: 4px solid var(--thistle-down); }
+.score-card.draws { border-bottom: 4px solid var(--puddle-jumper); }
+
+.game-board-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    background: var(--board-bg);
+    padding: 12px;
+    border-radius: 16px;
+    width: 300px;
+    height: 300px;
+    box-shadow: var(--shadow);
+}
+
+.cell {
+    background: var(--cell-bg);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover:not(.occupied) {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.05);
+}
+
+.cell.occupied {
+    cursor: default;
+}
+
+.cell-content {
+    font-size: 2.5rem;
+    font-weight: 800;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.cell .symbol-x { color: var(--cupids-arrow); }
+.cell .symbol-o { color: var(--thistle-down); }
+
+.cell.winner {
+    background: var(--lolly);
+    animation: winPulse 1s infinite alternate;
+}
+
+@keyframes winPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn.primary {
+    background: var(--btn-bg);
+    color: white;
+}
+
+.btn.primary:hover {
+    background: var(--btn-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn.secondary {
+    background: transparent;
+    border: 2px solid var(--thistle-down);
+    color: var(--thistle-down);
+}
+
+.btn.secondary:hover {
+    background: var(--thistle-down);
+    color: white;
+}
+
+footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    max-width: 90%;
+    width: 400px;
+    animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#result-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--cupids-arrow);
+}
+
+#result-message {
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+    .game-board {
+        width: 260px;
+        height: 260px;
+    }
+    .cell-content {
+        font-size: 2rem;
+    }
+}
